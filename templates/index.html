@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+
+
+    <title>XX市场账目统计</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/static/css/tablesorter/blue/style.css" rel="stylesheet"/>
+    <style type="text/css">
+        body {
+          padding-top: 50px;
+          padding-bottom: 20px;
+        }
+    </style>
+
+
+    <script src="/static/js/jquery-1.9.0.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/jquery.tablesorter.js"></script>
+    <script>
+        $(function(){
+            //表格显示
+            $(".tablesorter").tablesorter({
+                widgets: ['zebra']
+            })
+        })
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">XX市场账目统计</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="form"  style="display:none">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron" style="display:none">
+      <div class="container">
+        <h1>Hello, world!</h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+
+        <table class="tablesorter">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>毛重</th>
+                    <th>皮重</th>
+                    <th>净重</th>
+                    <th>金额</th>
+                    <th>日期</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rs %}
+                    <tr data-id="{{ r.id }}">
+                        <td>{{ r.name }}</td>
+                        <td>{{ r.mao }}</td>
+                        <td>{{ r.pi }}</td>
+                        <td>{{ r.jing }}</td>
+                        <td>{{ r.money }}</td>
+                        <td>{{ r.showtime }}</td>
+                        <td>{{ r.status }}</td>
+                        <td>
+                            <a href="/pay/?id={{ r.id }}" class="btn btn-mini btn-primary">支付</a>
+                            <a href="/unpaid/?id={{ r.id }}" class="btn btn-mini btn-primary">未付</a>
+
+                            <a href="/del_account/?id={{ r.id }}" onclick="return confirm('确定要删除？')" class="btn btn-mini btn-danger">删除</a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+
+
+
+        <form action="/add_account/">
+            <label>添加新纪录</label>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="姓名" name="name" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="毛重" name="mao" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="皮重" name="pi" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="净重" name="jing" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="金额" name="money" />
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="日期 ( {{ nowtime }} )" name="time" />
+            </div>
+            <input type="submit" class="btn" value="添加" />
+        </form>
+
+
+
+        <hr>
+
+
+      <footer>
+        <p>&copy; Accounting 2014</p>
+      </footer>
+    </div> <!-- /container -->
+
+  </body>
+</html>
