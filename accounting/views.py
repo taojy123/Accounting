@@ -10,8 +10,44 @@ import uuid
 import datetime
 
 def index(request):
-    rs = Account.objects.all()
     nowtime = datetime.datetime.now().strftime("%Y-%m-%d")
+    rs = Account.objects.order_by("-id")
+
+    filter_name = request.REQUEST.get("filter_name")
+    filter_time = request.REQUEST.get("filter_time")
+
+    if filter_name:
+        rs = rs.filter(name=filter_name)
+
+    if filter_time:
+        time1, time2 = filter_time.split()
+        time1 = datetime.datetime.strptime(time1, "%Y-%m-%d")
+        time2 = datetime.datetime.strptime(time2, "%Y-%m-%d")
+        rs = rs.filter(time__gte=time1)
+        rs = rs.filter(time__lte=time1)
+
+    total_mao = 0
+    total_pi = 0
+    total_jing = 0
+    total_money = 0
+    for r in rs:
+        try:
+            total_mao += float(r.mao)
+        except:
+            pass
+        try:
+            total_pi += float(r.pi)
+        except:
+            pass
+        try:
+            total_jing += float(r.jing)
+        except:
+            pass
+        try:
+            total_money += float(r.money)
+        except:
+            pass
+
     return render_to_response('index.html', locals())
 
 def add_account(request):
@@ -32,18 +68,28 @@ def add_account(request):
     account.save()
     return HttpResponseRedirect("/")
 
-def del_Account(request):
+def del_account(request):
     id = request.REQUEST.get("id")
     Account.objects.filter(id=id).delete()
     return HttpResponseRedirect("/")
 
-def update_Account(request):
+def update_account(request):
     return HttpResponseRedirect("/")
 
 
+def pay(request):
+    id = request.REQUEST.get("id")
+    account = Account.objects.get(id=id)
+    account.status = "已支付"
+    account.save()
+    return HttpResponseRedirect("/")
 
-
-
+def unpaid(request):
+    id = request.REQUEST.get("id")
+    account = Account.objects.get(id=id)
+    account.status = "未支付"
+    account.save()
+    return HttpResponseRedirect("/")
 
 
 #====================login=============================================
