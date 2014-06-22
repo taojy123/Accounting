@@ -10,7 +10,7 @@ class Account(models.Model):
     pi = models.CharField(max_length=255, blank=True , null=True)
     jing = models.CharField(max_length=255, blank=True , null=True)
     money = models.CharField(max_length=255, blank=True , null=True)
-    time = models.DateTimeField(default=datetime.datetime.now(), auto_now=True)
+    time = models.DateTimeField(default=datetime.datetime.now())
     status = models.CharField(max_length=255, blank=True , null=True, default="未支付")
 
 

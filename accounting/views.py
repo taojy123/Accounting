@@ -13,8 +13,8 @@ def index(request):
     nowtime = datetime.datetime.now().strftime("%Y-%m-%d")
     rs = Account.objects.order_by("-id")
 
-    filter_name = request.REQUEST.get("filter_name")
-    filter_time = request.REQUEST.get("filter_time")
+    filter_name = request.REQUEST.get("filter_name", "")
+    filter_time = request.REQUEST.get("filter_time", "")
 
     if filter_name:
         rs = rs.filter(name=filter_name)
@@ -24,7 +24,7 @@ def index(request):
         time1 = datetime.datetime.strptime(time1, "%Y-%m-%d")
         time2 = datetime.datetime.strptime(time2, "%Y-%m-%d")
         rs = rs.filter(time__gte=time1)
-        rs = rs.filter(time__lte=time1)
+        rs = rs.filter(time__lte=time2)
 
     total_mao = 0
     total_pi = 0
@@ -58,13 +58,15 @@ def add_account(request):
     money = request.REQUEST.get("money")
     time = request.REQUEST.get("time")
     account = Account()
-    account.name = name
+    account.name = name[:1] + "**"
     account.mao = mao
     account.pi = pi
     account.jing = jing
     account.money = money
     if time:
         account.time = datetime.datetime.strptime(time, "%Y-%m-%d")
+    else:
+        account.time = datetime.datetime.now()
     account.save()
     return HttpResponseRedirect("/")
 
