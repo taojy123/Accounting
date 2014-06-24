@@ -63,7 +63,7 @@ def add_account(request):
     money = request.REQUEST.get("money")
     time = request.REQUEST.get("time")
     account = Account()
-    account.name = name[:1] + "**"
+    account.name = name
     account.mao = mao
     account.pi = pi
     account.jing = jing
