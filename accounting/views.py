@@ -48,6 +48,11 @@ def index(request):
         except:
             pass
 
+    namelist = []
+    for account in Account.objects.all():
+        if account.name not in namelist:
+            namelist.append(account.name)
+
     return render_to_response('index.html', locals())
 
 def add_account(request):
